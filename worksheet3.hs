@@ -11,17 +11,92 @@ lengthC (x:xs) = 1+ lengthC xs
 
 reverseC :: [a] -> [a]
 reverseC [] = []
-reverseC (x:xs) = reverse(xs) ++ x
+reverseC (x:xs) = reverse(xs) ++ [x]
+
+zipC :: [a] -> [b] -> [(a, b)]
+zipC [] _ = []
+zipC _ [] = []
+zipC (x:xs) (y:ys) = (x,y) : zipC xs ys
+
+dropC :: Int -> [a] -> [a]
+dropC 0 xs = xs
+dropC _ [] = []
+dropC n (x:xs) = dropC (n-1) xs
+
+{-
+(++) :: [a] -> [a] -> [a]
+[] ++ ys =ys
+(x:xs) ++ ys = x : (xs ++ ys)
+-}
+
+qsort :: [Int] -> [Int]
+qsort [] = []
+qsort (x:xs) =  qsort [x' | x' <- xs, x' < x] ++ [x] ++ qsort [x' | x' <- xs, x' >= x]
+
+{-
+even :: Int -> Bool
+even 0 = True
+even n = odd (n-1)
+
+odd :: Int -> Bool
+odd 0 = False
+odd n = even (n-1)
 
 
-나는 어떻게 살고 싶은가.
+evens :: [a] -> [a]
+evens [] = []
+evens (x:xs) = x : odds xs
 
-관세공무원으로서 한 공직을 맡고있는 것에 대해 자긍심을 느끼며 삶에 보람을 느끼며 근무하고 싶습니다.
-
-저는 일을 여러가지 벌린적은 많았으나 마무리하지 못할 때가 많았고, 그때마다 아쉬움을 느겼습니다.
-그래서 시작한 일을 끈기있게 실행하여 결실을 맺는 삶을 살고 싶습니다.
-
-
-지피지기 백전불패
+odds :: [a] -> [a]
+odds [] = []
+odds (_:xs) = evens xs
 
 
+init :: [a] -> [a]
+init (x:xs) | null xs = []
+            | otherwise = x : init xs
+-}
+{-
+(*) Int -> Int -> Int
+m * 0 = 0
+m * n = m + (m * (n-1))
+-}
+
+insert :: Ord a => a -> [a] -> [a]
+insert x [] = [x]
+insert x (y:ys) | x > y = y : insert x ys
+                 | otherwise = x : y : ys
+
+isort :: Ord a => [a] -> [a]
+isort [] =[]
+isort (x:xs) = insert x (isort xs)
+
+merge :: Ord a => [a] -> [a] -> [a]
+merge [] ys = ys
+merge xs [] = xs
+merge (x:xs) (y:ys) | x < y = x : merge xs (y:ys)
+                       | otherwise = y : merge (x:xs) ys
+
+halve :: [a] -> ([a], [a])
+halve xs = (take n xs, drop n xs) where n = (length xs) `div` 2
+
+msort :: Ord a => [a] -> [a]
+msort [x] = [x]
+msort xs = merge (msort left) (msort right)
+              where (left, right) = halve xs
+
+
+twice :: (a->a) -> a -> a
+twice f x = f (f x)
+
+
+{-
+sum [] = 0
+sum (x:xs) = x sum xs
+-}
+
+{-
+
+foldr (x:xs) 
+
+-}
